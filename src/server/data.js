@@ -3,32 +3,7 @@ module.exports = {
 };
 
 function getPeople() {
-  var GPIO = require('onoff').Gpio;
-var led = new GPIO(18, 'out');
-
-
-(function blink(count) {
-  if (count <= 0) {
-    return led.unexport();
-  }
-
-  led.read(function (err, value) { // Asynchronous read.
-    if (err) {
-      throw err;
-    }
-
-    led.write(value ^ 1, function (err) { // Asynchronous write.
-      if (err) {
-        throw err;
-      }
-    });
-  });
-
-  setTimeout(function () {
-    blink(count - 1);
-  }, 200);
-}(50));
-
+  blinkLEDs();
   return [
     { id: 1, firstName: 'John', lastName: 'Papa', age: 25, location: 'Florida' },
     { id: 2, firstName: 'Ward', lastName: 'Bell', age: 31, location: 'California' },
@@ -39,4 +14,32 @@ var led = new GPIO(18, 'out');
     { id: 7, firstName: 'Haley', lastName: 'Guthrie', age: 35, location: 'Wyoming' },
     { id: 8, firstName: 'Aaron', lastName: 'Jinglehiemer', age: 22, location: 'Utah' }
   ];
+}
+
+function blinkLEDs() {
+  var GPIO = require('onoff').Gpio;
+  var led = new GPIO(18, 'out');
+
+
+  (function blink(count) {
+    if (count <= 0) {
+      return led.unexport();
+    }
+
+    led.read(function (err, value) { // Asynchronous read.
+      if (err) {
+        throw err;
+      }
+
+      led.write(value ^ 1, function (err) { // Asynchronous write.
+        if (err) {
+          throw err;
+        }
+      });
+    });
+
+    setTimeout(function () {
+      blink(count - 1);
+    }, 200);
+  } (10));
 }
